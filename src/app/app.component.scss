@@ -1,0 +1,24 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: "header header header header" "video video video video" "video video video video" "video video video video";
+}
+
+.header {
+  grid-area: header;
+}
+
+.video {
+  grid-area: video;
+
+  video {
+    border: 1px solid #c0c0c0;
+  }
+}
+
+.center {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}

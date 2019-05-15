@@ -1,0 +1,46 @@
+.app-kurento-video {
+  border: 1px solid #c0c0c0;
+
+  .app-kurento-video-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+
+    .video-container {
+      height: calc(100% - 48px);
+      position: relative;
+
+      .video {
+        height: auto;
+        max-height: 100%;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .loading {
+        align-items: center;
+        background-color: #ffffff;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+    }
+
+    .buttons {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      height: 48px;
+      padding: 0 4px;
+
+      button:not(:last-child) {
+        padding-right: 4px;
+      }
+    }
+  }
+}
