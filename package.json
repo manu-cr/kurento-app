@@ -1,6 +1,16 @@
 {
   "name": "kurento-app",
   "version": "0.0.0",
+  "keywords": [
+    "angular",
+    "kurento",
+    "WebRTC",
+    "streaming",
+    "player",
+    "browser",
+    "websocket",
+    "socket"
+  ],
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 9000",
