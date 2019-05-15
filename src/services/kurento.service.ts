@@ -73,8 +73,7 @@ export class KurentoService implements OnDestroy {
         }
 
       },
-      error => console.error(error),
-      () => console.log('THE COMPLETITION!!!!!!!!!!!!!!!!!!!!!')
+      error => console.error(error)
     );
   }
 
@@ -90,8 +89,6 @@ export class KurentoService implements OnDestroy {
     const options = {
       remoteVideo: this.video,
       onicecandidate: candidate => {
-        console.log('Local candidate' + JSON.stringify(candidate));
-
         const message = {
           id: 'onIceCandidate',
           candidate: candidate
@@ -99,8 +96,6 @@ export class KurentoService implements OnDestroy {
         this.sendMessage(message);
       }
     };
-
-    console.info('User media constraints ', userMediaConstraints);
 
     this.webRtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
       error => {
@@ -127,14 +122,12 @@ export class KurentoService implements OnDestroy {
 
   public sendMessage(message): void {
     const jsonMessage = JSON.stringify(message);
-    console.log('Senging message: ' + jsonMessage);
     this.wsService.send(jsonMessage);
   }
 
   public startResponse(message): void {
     // this.status.next(VideoStatus.Play);
-    console.log('SDP answer received from server. Processing ...');
-
+    // console.log('SDP answer received from server. Processing ...');
     this.webRtcPeer.processAnswer(message.sdpAnswer, error => {
       if (error) {
         return console.error(error);
