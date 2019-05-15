@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 import { KurentoService, VideoStatus } from '../../services/kurento.service';
@@ -16,6 +16,11 @@ import { WebsocketService } from '../../services/websocket.service';
 })
 export class KurentoVideoComponent implements AfterViewInit {
 
+  @Input('camera')
+  public cameraId: number;
+  @Input('websocket')
+  public webSocketUrl: string;
+
   protected loadingSub: BehaviorSubject<boolean> = new BehaviorSubject(false);
   public loading$ = this.loadingSub.asObservable();
 
@@ -27,7 +32,11 @@ export class KurentoVideoComponent implements AfterViewInit {
   ) { }
 
   public ngAfterViewInit(): void {
-    this.kurentoService.configure(this.video.nativeElement);
+    this.kurentoService.configure({
+      cameraId: this.cameraId,
+      webSocketUrl: this.webSocketUrl,
+      videoComponent: this.video
+    });
     this.kurentoService.status.subscribe(status => {
       if (VideoStatus.Loading === status) {
         this.loadingSub.next(true);

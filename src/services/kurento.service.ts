@@ -1,8 +1,14 @@
-import { Injectable, OnDestroy, Output } from '@angular/core';
+import { ElementRef, Injectable, OnDestroy, Output } from '@angular/core';
 import * as kurentoUtils from 'kurento-utils';
 import { BehaviorSubject, Subscription } from 'rxjs';
 
 import { WebsocketService } from './websocket.service';
+
+export interface KurentoServiceConfig {
+  cameraId: number;
+  webSocketUrl: string;
+  videoComponent: ElementRef;
+}
 
 export enum VideoStatus {
   Loading,
@@ -13,13 +19,11 @@ export enum VideoStatus {
 @Injectable()
 export class KurentoService implements OnDestroy {
 
-  // TODO: this must be configurable
-  public CAMERA_ID: number = 3;
-  public WEBSOCKET_URL: string = 'ws://10.7.0.42:9090/cameraViewer';
-
   @Output()
   public status: BehaviorSubject<VideoStatus> = new BehaviorSubject(VideoStatus.Stop);
 
+  protected cameraId: number;
+  protected webSocketUrl: string;
   protected video: any;
   protected webRtcPeer: any;
   protected wsSubscription: Subscription;
@@ -30,9 +34,11 @@ export class KurentoService implements OnDestroy {
     this.wsSubscription.unsubscribe();
   }
 
-  public configure(video: any): void {
-    this.video = video;
-    this.wsSubscription = this.wsService.initSocket(this.WEBSOCKET_URL).subscribe(
+  public configure(config: KurentoServiceConfig): void {
+    this.cameraId = config.cameraId;
+    this.webSocketUrl = config.webSocketUrl;
+    this.video = config.videoComponent.nativeElement;
+    this.wsSubscription = this.wsService.initSocket(this.webSocketUrl).subscribe(
       message => {
         const parsedMessage = JSON.parse(message.data);
 
@@ -114,7 +120,7 @@ export class KurentoService implements OnDestroy {
     const message = {
       id: 'start',
       sdpOffer: offerSdp,
-      videourl: this.CAMERA_ID
+      videourl: this.cameraId
     };
     this.sendMessage(message);
   }
