@@ -75,16 +75,11 @@ export class KurentoService implements OnDestroy {
       },
       error => console.error(error)
     );
+    // this.wsService.ready.subscribe(() => this.start());
   }
 
   public start(): void {
-
     this.status.next(VideoStatus.Loading);
-    // Video and audio by default
-    const userMediaConstraints = {
-      audio: true,
-      video: true
-    };
 
     const options = {
       remoteVideo: this.video,
@@ -110,7 +105,6 @@ export class KurentoService implements OnDestroy {
     if (error) {
       return console.error('Error generating the offer');
     }
-    console.info('Invoking SDP offer callback function ' + location.host);
 
     const message = {
       id: 'start',

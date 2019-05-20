@@ -1,27 +1,31 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Injectable, Output } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class WebsocketService {
 
-  public wSocket: WebSocket;
+  public webSocket: WebSocket;
+
+  @Output()
+  public ready: Subject<void> = new Subject();
 
   public initSocket(url: string): Observable<any> {
-    this.wSocket = new WebSocket(url);
+    this.webSocket = new WebSocket(url);
+    this.webSocket.onopen = () => this.ready.next();
 
     return new Observable<any>(observer => {
-      this.wSocket.onmessage = (event: MessageEvent) => observer.next(event);
-      this.wSocket.onerror = (event: MessageEvent) => observer.error(event);
-      this.wSocket.onclose = (event: CloseEvent) => observer.complete();
+      this.webSocket.onmessage = (event: MessageEvent) => observer.next(event);
+      this.webSocket.onerror = (event: Event) => observer.error(event);
+      this.webSocket.onclose = (event: CloseEvent) => observer.complete();
 
       // Callback invoked on unsubscribe
-      return () => this.wSocket.close();
+      return () => this.webSocket.close();
     });
   }
 
   public send(message: string): void {
-    if (this.wSocket.readyState === WebSocket.OPEN) {
-      this.wSocket.send(message);
+    if (this.webSocket.readyState === WebSocket.OPEN) {
+      this.webSocket.send(message);
     }
   }
 
